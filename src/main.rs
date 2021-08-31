@@ -5,7 +5,7 @@ use std::process;
 
 fn main() {
     let matches = App::new("diceware")
-        .version("0.1.0")
+        .version("0.1.1")
         .author("Vladimir Timofeenko <public@vtimofeenko.com")
         .about("Primitive diceware commandline")
         .arg(

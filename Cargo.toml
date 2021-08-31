@@ -1,6 +1,6 @@
 [package]
 name = "diceware"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Vladimir Timofeenko <public@vtimofeenko.com>"]
 license = "WTFPL"
 edition = "2018"
