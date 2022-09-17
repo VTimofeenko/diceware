@@ -10,21 +10,21 @@ fn main() {
         .about("Primitive diceware commandline")
         .arg(
             Arg::with_name("length")
-                .short("l")
+                .short('l')
                 .long("length")
                 .takes_value(true)
                 .help("Amount of words in the passphrase. Default - 6"),
         )
         .arg(
             Arg::with_name("delimeter")
-                .short("d")
+                .short('d')
                 .long("delimeter")
                 .takes_value(true)
                 .help("Separate words by this value. Default - space."),
         )
         .arg(
             Arg::with_name("caps")
-                .short("c")
+                .short('c')
                 .long("caps")
                 .help("Capitalize words"),
         )
