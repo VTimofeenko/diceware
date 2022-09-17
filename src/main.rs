@@ -49,7 +49,7 @@ fn main() {
     } else {
         config.capitalize_first = Probability::Never;
     }
-    let mut scheme = config.to_scheme();
+    let scheme = config.to_scheme();
 
     println!("{}", scheme.generate());
 }
