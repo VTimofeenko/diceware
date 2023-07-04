@@ -1,55 +1,33 @@
 extern crate chbs;
 use chbs::{config::BasicConfig, prelude::*, probability::Probability};
-use clap::{App, Arg};
-use std::process;
+use clap::Parser;
+
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
+struct Args {
+    /// Amount of words in the passphrase
+    #[arg(short, long, default_value_t = 6)]
+    length: usize,
+
+    /// Separate words by this value. Default - space.
+    #[arg(short, long, default_value_t = ' ')]
+    delimeter: char,
+
+    /// Capitalize words
+    #[arg(short, long, default_value_t = true)]
+    caps: bool,
+}
+
 
 fn main() {
-    let matches = App::new("diceware")
-        .version("0.1.2")
-        .author("Vladimir Timofeenko <public@vtimofeenko.com")
-        .about("Primitive diceware commandline")
-        .arg(
-            Arg::with_name("length")
-                .short('l')
-                .long("length")
-                .takes_value(true)
-                .help("Amount of words in the passphrase. Default - 6"),
-        )
-        .arg(
-            Arg::with_name("delimeter")
-                .short('d')
-                .long("delimeter")
-                .takes_value(true)
-                .help("Separate words by this value. Default - space."),
-        )
-        .arg(
-            Arg::with_name("caps")
-                .short('c')
-                .long("caps")
-                .help("Capitalize words"),
-        )
-        .get_matches();
+    let args = Args::parse();
 
-    let len = matches.value_of("length");
-    let words;
-
-    match len {
-        None => words = 6,
-        Some(s) => match s.parse::<usize>() {
-            Ok(n) => words = n,
-            Err(_) => process::exit(1),
-        },
-    }
-
-    let mut config = BasicConfig::default();
-    config.words = words;
-    config.separator = matches.value_of("delimeter").unwrap_or(" ").into();
-    if matches.is_present("caps") {
+    let mut config = BasicConfig::<chbs::word::WordSampler> { words: args.length, separator: args.delimeter.to_string(), ..Default::default() };
+    if args.caps {
         config.capitalize_first = Probability::Always;
     } else {
         config.capitalize_first = Probability::Never;
     }
     let scheme = config.to_scheme();
-
     println!("{}", scheme.generate());
 }
