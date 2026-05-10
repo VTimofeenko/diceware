@@ -10,8 +10,17 @@ struct Args {
     length: usize,
 
     /// Separate words by this value. Default - space.
-    #[arg(short, long, default_value_t = ' ')]
-    delimeter: char,
+    #[arg(
+        short,
+        long,
+        default_value = " ",
+        default_value_if("no_delimeter", "true", Some(""))
+    )]
+    delimeter: String,
+
+    /// Produce passphrase with no delimiter (e.g. FooBarBaz)
+    #[arg(long)]
+    no_delimeter: bool,
 
     /// Capitalize words
     #[arg(short, long, default_value_t = true)]
@@ -22,7 +31,8 @@ struct Args {
 fn main() {
     let args = Args::parse();
 
-    let mut config = BasicConfig::<chbs::word::WordSampler> { words: args.length, separator: args.delimeter.to_string(), ..Default::default() };
+    let separator = args.delimeter;
+    let mut config = BasicConfig::<chbs::word::WordSampler> { words: args.length, separator, ..Default::default() };
     if args.caps {
         config.capitalize_first = Probability::Always;
     } else {
